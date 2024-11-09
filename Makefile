@@ -8,10 +8,10 @@ dropdb:
 	docker exe -it some-postgres dropdb --username=postgres --owner=postgres simple_bank
 
 migrateup:
-	migrate -source file://C:/learning/simplebank/db/migration -database postgres://postgres:mysecretpassword@localhost:5432/simple_bank?sslmode=disable -verbose up
+	migrate -source file://./db/migration -database postgres://postgres:mysecretpassword@localhost:5432/simple_bank?sslmode=disable -verbose up
 
 migratedown:
-	migrate -source file://C:/learning/simplebank/db/migration -database postgres://postgres:mysecretpassword@localhost:5432/simple_bank?sslmode=disable -verbose down
+	migrate -source file://./db/migration -database postgres://postgres:mysecretpassword@localhost:5432/simple_bank?sslmode=disable -verbose down
 
 sqlc:
 	sqlc generate
