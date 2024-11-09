@@ -1,12 +1,12 @@
-package simplebank
+package sqlc
 
 import (
 	"testing"
 	"context"
-	"github.com/techschool/simplebank/db/util"
 	"github.com/stretchr/testify/require"
 	"time"
 	"database/sql"
+	"github.com/blancogames4/simplebank/db/util"
 ) 
 
 func createRandomAccount(t *testing.T) Account{

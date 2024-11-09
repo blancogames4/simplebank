@@ -7,5 +7,5 @@ sql:
     engine: "postgresql"
     gen:
       go:
-        package: "simplebank"
+        package: "sqlc"
         out: "db/sqlc"

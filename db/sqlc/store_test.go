@@ -1,4 +1,4 @@
-package simplebank
+package sqlc
 
 import (
 	"testing"
