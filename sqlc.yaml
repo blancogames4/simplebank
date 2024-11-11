@@ -9,3 +9,5 @@ sql:
       go:
         package: "sqlc"
         out: "db/sqlc"
+        emit_empty_slices: true
+        emit_interface: true

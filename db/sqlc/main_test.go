@@ -1,29 +1,30 @@
 package sqlc
 
 import (
-    "database/sql"
-    "log"
-    "os"
-    "testing"
-    _ "github.com/lib/pq"
-)
+	"database/sql"
+	"log"
+	"os"
+	"testing"
 
-const (
-    dbDriver = "postgres"
-    dbSource = "postgres://postgres:mysecretpassword@localhost:5432/simple_bank?sslmode=disable"
+	"github.com/blancogames4/simplebank/db/util"
+	_ "github.com/lib/pq"
 )
 
 var testQueries *Queries
 var testDB *sql.DB
 
 func TestMain(m *testing.M) {
-    var err error
-    testDB, err = sql.Open(dbDriver, dbSource)
-    if err != nil {
-        log.Fatal("cannot connect to db:", err)
-    }
+	var err error
+	config, err := util.LoadConfig("../..")
+	if err != nil {
+		log.Fatal("cannot load config:", err)
+	}
+	testDB, err = sql.Open(config.DBDriver, config.DBSource)
+	if err != nil {
+		log.Fatal("cannot connect to db:", err)
+	}
 
-    testQueries = New(testDB)
+	testQueries = New(testDB)
 
-    os.Exit(m.Run())
+	os.Exit(m.Run())
 }
