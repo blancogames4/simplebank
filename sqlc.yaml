@@ -3,7 +3,9 @@ cloud:
   project: "simplebank"
 sql:
   - schema: "db/schema/schema.sql"
-    queries: "db/query/account.sql"
+    queries: 
+    - "db/query/account.sql"
+    - "db/query/user.sql"
     engine: "postgresql"
     gen:
       go:
