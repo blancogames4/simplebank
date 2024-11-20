@@ -20,6 +20,7 @@ COPY db/migration ./migration
 
 # Ensure start.sh is executable
 RUN chmod +x /app/start.sh
+RUN chmod +x /app/wait-for.sh
 
 EXPOSE 8081
 CMD [ "/app/main"]
