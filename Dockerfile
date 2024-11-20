@@ -21,6 +21,6 @@ COPY db/migration ./migration
 # Ensure start.sh is executable
 RUN chmod +x /app/start.sh
 
-EXPOSE 8080
+EXPOSE 8081
 CMD [ "/app/main"]
 ENTRYPOINT ["/app/start.sh"]
