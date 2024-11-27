@@ -58,6 +58,10 @@ jobs:
     - name: Update kube config
       run: aws eks update-kubeconfig --name simple_bank --region us-east-1 --kubeconfig /tmp/kubeconfig
 
+    - name: Verify kubeconfig contents
+      run: cat /tmp/kubeconfig
+    
+
     - name: Set kube context
       run: kubectl config use-context arn:aws:eks:us-east-1:910225201006:cluster/simple_bank
 
