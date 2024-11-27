@@ -48,9 +48,6 @@ jobs:
         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -t $REGISTRY/$REPOSITORY:latest .
         docker push -a $REGISTRY/$REPOSITORY 
 
-    - name: Verify kubeconfig file
-      run: cat ~/.kube/config
-
     - name: Install AWS CLI v2
       run: |
         curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
@@ -66,6 +63,9 @@ jobs:
           
     - name: Update kube config
       run: aws eks update-kubeconfig --name simple_bank --region us-east-1
+
+    - name: Verify kubeconfig file
+      run: cat ~/.kube/config
     
     - name: Verify AWS credentials
       run: aws sts get-caller-identity
