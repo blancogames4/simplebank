@@ -58,22 +58,20 @@ jobs:
     - name: Update kube config
       run: aws eks update-kubeconfig --name simple_bank --region us-east-1 --kubeconfig /tmp/kubeconfig
 
+    - name: Set KUBECONFIG environment variable
+      run: export KUBECONFIG=/tmp/kubeconfig
+
     - name: Verify kubeconfig contents
       run: cat /tmp/kubeconfig
-    
+
+    - name: Verify kubectl context
+      run: kubectl config get-contexts
 
     - name: Set kube context
       run: kubectl config use-context arn:aws:eks:us-east-1:910225201006:cluster/simple_bank
-
-    - name: Verify kubeconfig file
-      run: cat ~/.kube/config
-    
-    - name: Verify AWS credentials
-      run: aws sts get-caller-identity
     
     - name: Deploy image to Amazon EKS
       run: |
-        export AWS_PROFILE=default
         kubectl apply -f eks/deployment.yaml
         kubectl apply -f eks/service.yaml
         kubectl apply -f eks/issuer.yaml
