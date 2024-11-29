@@ -50,7 +50,7 @@ jobs:
         docker push -a $REGISTRY/$REPOSITORY 
     
     - name: Update kubeconfig
-      run: aws eks update-kubeconfig --region us-east-1 --name simple_bank
+      run: aws eks update-kubeconfig --region us-east-1 --name simple_bank --role-arn arn:aws:iam::910225201006:role/deployecr
     
     - name: verify cred
       run: aws sts get-caller-identity
