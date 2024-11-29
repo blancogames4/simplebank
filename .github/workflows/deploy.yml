@@ -50,13 +50,17 @@ jobs:
         docker push -a $REGISTRY/$REPOSITORY 
     
     - name: Update kubeconfig
-      run: aws eks update-kubeconfig --region us-east-1 --name simple_bank
+      run: aws eks update-kubeconfig --region us-east-1 --name simple_bank --debug
     
     - name: verify cred
       run: aws sts get-caller-identity
     
-    - name: check if public
-      run: aws eks describe-cluster --name simple_bank --query "cluster.resourcesVpcConfig.endpointPublicAccess"
+    - name: display kubeconfig
+      run: cat ~/.kube/config
+    
+    - name: Verify AWS credentials
+      run: aws sts get-caller-identity
+    
 
     - name: verify context
       run: kubectl get svc -v=6
