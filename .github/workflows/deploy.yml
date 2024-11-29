@@ -29,14 +29,13 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        role-to-assume: arn:aws:iam::910225201006:role/deployecr
         aws-region: us-east-1
 
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v2
-
+    
     - name: Load secrets and save to app.env
       run: aws secretsmanager get-secret-value --secret-id simple_bank --query SecretString --output text | jq -r 'to_entries|map("\(.key)=\(.value)")|.[]' > app.env
 
@@ -46,28 +45,14 @@ jobs:
         REPOSITORY: simplebank
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -t $REGISTRY/$REPOSITORY:latest .
+        docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -t $REGISTRY/$REPOSITORYlatest .
         docker push -a $REGISTRY/$REPOSITORY 
     
-    - name: Update kubeconfig
-      run: aws eks update-kubeconfig --region us-east-1 --name simple_bank --debug
-    
-    - name: verify cred
-      run: aws sts get-caller-identity
-    
-    - name: display kubeconfig
-      run: cat ~/.kube/config
-    
-    - name: Verify AWS credentials
-      run: aws sts get-caller-identity
-    
-
-    - name: verify context
-      run: kubectl get svc -v=6
-    
+    - name: Update kube config
+      run: aws eks update-kubeconfig --name simple_bank --region us-east-1 --role-arn arn:aws:iam::910225201006:role/deployecr
     - name: Deploy image to Amazon EKS
       run: |
-        kubectl apply -f eks/deployment.yaml --v=8
+        kubectl apply -f eks/deployment.yaml
         kubectl apply -f eks/service.yaml
         kubectl apply -f eks/issuer.yaml
         kubectl apply -f eks/ingress.yaml
