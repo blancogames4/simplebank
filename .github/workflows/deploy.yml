@@ -49,7 +49,7 @@ jobs:
         docker push -a $REGISTRY/$REPOSITORY 
     
     - name: Update kube config
-      run: aws eks update-kubeconfig --name simple_bank --region us-east-1 --role-arn arn:aws:iam::910225201006:role/deployecr
+      run: aws eks update-kubeconfig --name simple_bank --region us-east-1 --role-arn arn:aws:iam::910225201006:role/deployecr --debug
     - name: Deploy image to Amazon EKS
       run: |
         kubectl apply -f eks/deployment.yaml
