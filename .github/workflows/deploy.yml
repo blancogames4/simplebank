@@ -48,36 +48,10 @@ jobs:
         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -t $REGISTRY/$REPOSITORY:latest .
         docker push -a $REGISTRY/$REPOSITORY 
     
-    - name: Debug AWS credentials
-      run: |
-          echo "AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID"
-          echo "AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY"
-          echo "AWS_SESSION_TOKEN: $AWS_SESSION_TOKEN"
-
-          
-    - name: Update kube config
-      run: aws eks update-kubeconfig --name simple_bank --region us-east-1 --kubeconfig /tmp/kubeconfig
-
-    - name: Set KUBECONFIG environment variable
-      run: export KUBECONFIG=/tmp/kubeconfig
-
-    - name: Verify kubeconfig contents
-      run: cat /tmp/kubeconfig
-
-    - name: Verify kubectl context
-      run: kubectl config get-contexts
-
-    - name: Set kube context
-      run: kubectl config use-context arn:aws:eks:us-east-1:910225201006:cluster/simple_bank
-    
     - name: Deploy image to Amazon EKS
       run: |
+        kubectl apply -f eks/aws-auth.yaml
         kubectl apply -f eks/deployment.yaml
         kubectl apply -f eks/service.yaml
         kubectl apply -f eks/issuer.yaml
         kubectl apply -f eks/ingress.yaml
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
-        AWS_DEFAULT_REGION: us-east-1
