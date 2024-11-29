@@ -26,10 +26,6 @@ jobs:
         version: 'v1.31.1' # default is latest stable
       id: install  
 
-    - name: Configure kubectl
-      run: |
-        aws eks update-kubeconfig --region us-east-1 --name simple_bank
-
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
@@ -40,6 +36,10 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v2
     
+    - name: Configure kubectl
+      run: |
+        aws eks update-kubeconfig --region us-east-1 --name simple_bank
+
     - name: Load secrets and save to app.env
       run: aws secretsmanager get-secret-value --secret-id simple_bank --query SecretString --output text | jq -r 'to_entries|map("\(.key)=\(.value)")|.[]' > app.env
 
