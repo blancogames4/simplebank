@@ -54,9 +54,12 @@ jobs:
     
     - name: verify cred
       run: aws sts get-caller-identity
+    
+    - name: check if public
+      run: aws eks describe-cluster --name simple_bank --query "cluster.resourcesVpcConfig.endpointPublicAccess"
 
     - name: verify context
-      run: kubectl get svc
+      run: kubectl get svc -v=6
     
     - name: Deploy image to Amazon EKS
       run: |
