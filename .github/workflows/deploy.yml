@@ -51,6 +51,9 @@ jobs:
     
     - name: Update kubeconfig
       run: aws eks update-kubeconfig --region us-east-1 --name simple_bank  
+    
+    - name: verify cred
+      run: aws sts get-caller-identity
       
     - name: Deploy image to Amazon EKS
       run: |
