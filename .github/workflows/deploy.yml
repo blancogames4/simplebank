@@ -29,7 +29,8 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
-        role-to-assume: arn:aws:iam::910225201006:role/deployecr
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
     - name: Login to Amazon ECR
@@ -49,7 +50,9 @@ jobs:
         docker push -a $REGISTRY/$REPOSITORY 
     
     - name: Update kube config
-      run: aws eks update-kubeconfig --name simple_bank --region us-east-1
+      run: aws eks update-kubeconfig --name simple_bank --region us-east-1 --profile my-user-profile
+      env:
+          AWS_PROFILE: my-user-profile 
 
     - name: Display kubeconfig file after update
       run: cat ~/.kube/config
