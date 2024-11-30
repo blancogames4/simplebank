@@ -50,13 +50,14 @@ jobs:
         docker push -a $REGISTRY/$REPOSITORY 
     
     - name: Update kube config
-      run: aws eks update-kubeconfig --name simple_bank --region us-east-1 --profile default
+      run: aws eks update-kubeconfig --name simple_bank --region us-east-1
 
     - name: Display kubeconfig file after update
       run: cat ~/.kube/config
 
     - name: Deploy image to Amazon EKS
       run: |
+        kubectl apply -f eks/aws-auth.yaml
         kubectl apply -f eks/deployment.yaml
         kubectl apply -f eks/service.yaml
         kubectl apply -f eks/issuer.yaml
