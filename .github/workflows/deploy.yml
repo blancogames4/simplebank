@@ -54,6 +54,10 @@ jobs:
     - name: Display kubeconfig file after update
       run: cat ~/.kube/config
 
+    - name: context
+      run: kubectl config use-context arn:aws:eks:us-east-1:910225201006:cluster/simple_bank
+
+
     - name: Deploy image to Amazon EKS
       run: |
         export KUBECONFIG=~/.kube/config
