@@ -50,7 +50,7 @@ jobs:
         docker push -a $REGISTRY/$REPOSITORY 
     
     - name: Update kube config
-      run: aws eks update-kubeconfig --name simple_bank --region us-east-1
+      run: aws eks update-kubeconfig --name simple_bank --region us-east-1 --profile default
 
     - name: Display kubeconfig file after update
       run: cat ~/.kube/config
